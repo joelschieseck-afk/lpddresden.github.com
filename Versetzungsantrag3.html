@@ -13,19 +13,13 @@
         .report-card { max-width: 950px; margin: auto; background: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); }
         .watermark { color: rgba(211, 47, 47, 0.3); font-size: 11px; text-align: center; border-bottom: 1px solid #eee; margin-bottom: 20px; padding-bottom: 5px; font-weight: bold; text-transform: uppercase; }
         .report-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary-dark); padding-bottom: 15px; margin-bottom: 25px; }
-        
-        /* Logo-Fix: Kein externes Image-Tag um Tainted Canvas zu vermeiden */
-        .logo-placeholder { 
-            width: 80px; height: 80px; background: #eee; border: 2px solid #333; 
-            display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 10px; text-align: center;
-        }
-
+        .logo-placeholder { width: 80px; height: 80px; background: #eee; border: 2px solid #333; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 10px; text-align: center; }
         .section-title { background: #f1f1f1 !important; padding: 8px 15px; font-weight: bold; text-transform: uppercase; font-size: 0.85rem; margin-top: 25px; border-left: 4px solid var(--accent-blue); }
         .form-label { font-weight: 700; margin-bottom: 2px; font-size: 0.8rem; color: #333; }
         .signature-box { border: 1px solid #ced4da; padding: 15px; background: #fdfdfd; border-radius: 4px; margin-top: 10px; }
         .signature-input { font-family: 'Dancing Script', cursive; font-size: 1.5rem; border: none; border-bottom: 1px solid #ccc; width: 100%; background: transparent; outline: none; text-align: center; }
         .sub-input { border: none; border-bottom: 1px dashed #ccc; width: 100%; font-size: 0.8rem; text-align: center; margin-top: 5px; outline: none; background: transparent; }
-        @media print { .no-print { display: none !important; } .report-card { box-shadow: none !important; border: none !important; width: 100% !important; padding: 10mm !important; } }
+        .no-print { display: block; }
     </style>
 </head>
 <body>
@@ -80,15 +74,11 @@
     document.getElementById('currentDate').value = new Date().toLocaleDateString('de-DE');
 
     async function captureAndSend() {
-        const webhookURL = "https://discord.com/api/webhooks/1480442917041733742/quLn7sjvvXlpz5g-Mu5v-8T5Ywe6wnpqW--xbtsDmdg3Jw2x7Qg-gTl8U92tDb2ZtuDi"; // <--- HIER WEBHOOK EINTRAGEN
-        
-        if (webhookURL.includes("DEINE_DISCORD_URL")) return alert("Bitte Webhook-URL im Code eintragen!");
-
+        const webhookURL = "https://discord.com/api/webhooks/1480442917041733742/quLn7sjvvXlpz5g-Mu5v-8T5Ywe6wnpqW--xbtsDmdg3Jw2x7Qg-gTl8U92tDb2ZtuDi";
         const btn = document.getElementById('sendBtn');
         btn.disabled = true;
         btn.innerText = "Sende...";
 
-        // Wir nutzen "logging: false" und entfernen das Bild-Tag für den Export
         try {
             const canvas = await html2canvas(document.getElementById('captureArea'), {
                 scale: 2,
@@ -107,8 +97,7 @@
                 const response = await fetch(webhookURL, { method: 'POST', body: formData });
                 
                 if (response.ok) {
-                    alert("Erfolgreich als PNG archiviert!");
-                    window.print();
+                    alert("Erfolgreich an Discord gesendet!");
                 } else {
                     alert("Fehler beim Senden!");
                 }
@@ -118,6 +107,7 @@
         } catch (e) {
             alert("Fehler: " + e.message);
             btn.disabled = false;
+            btn.innerText = "PNG AN DISCORD SENDEN";
         }
     }
 </script>
