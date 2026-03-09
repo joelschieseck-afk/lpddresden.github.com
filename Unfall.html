@@ -19,7 +19,6 @@
         #imagePreviewContainer { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
         .preview-img { width: 100%; height: auto; border-radius: 8px; border: 1px solid #ddd; }
         .upload-area { border: 2px dashed #003366; padding: 20px; text-align: center; border-radius: 8px; background: #f0f4f8; cursor: pointer; }
-        .no-print { display: block; }
     </style>
 </head>
 <body>
@@ -50,15 +49,15 @@
             </div>
 
             <div class="section-title">Dokumentation</div>
-            <div class="upload-area no-print" onclick="document.getElementById('imageInput').click()">
+            <div class="upload-area" onclick="document.getElementById('imageInput').click()">
                 <p class="mb-0 small">Bilder hinzufügen</p>
                 <input type="file" id="imageInput" class="d-none" accept="image/*" multiple onchange="previewImages()">
             </div>
             <div id="imagePreviewContainer"></div>
 
-            <div class="col-12 text-center mt-5 no-print">
+            <div class="col-12 text-center mt-5">
                 <button type="button" id="sendBtn" class="btn btn-primary btn-lg shadow" onclick="captureAndSend()">
-                    BERICHT AN DISCORD SENDEN
+                    BERICHT SENDEN
                 </button>
             </div>
         </form>
@@ -66,6 +65,15 @@
 </div>
 
 <script>
+    // Funktion zum Schließen des Tablets (Signal an FiveM)
+    function closeTablet() {
+        fetch(`https://${GetParentResourceName()}/exit`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+            body: JSON.stringify({})
+        });
+    }
+
     window.onload = function() {
         const now = new Date();
         now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
@@ -79,41 +87,4 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = document.createElement('img');
-                img.src = e.target.result;
-                img.classList.add('preview-img');
-                previewContainer.appendChild(img);
-            }
-            reader.readAsDataURL(files[i]);
-        }
-    }
-
-    async function captureAndSend() {
-        const webhookURL = "https://discord.com/api/webhooks/1480442917041733742/quLn7sjvvXlpz5g-Mu5v-8T5Ywe6wnpqW--xbtsDmdg3Jw2x7Qg-gTl8U92tDb2ZtuDi";
-        const btn = document.getElementById('sendBtn');
-        btn.disabled = true; btn.innerText = "Wird gesendet...";
-
-        try {
-            const canvas = await html2canvas(document.getElementById('captureArea'), { scale: 2 });
-            canvas.toBlob(async (blob) => {
-                const formData = new FormData();
-                formData.append("file", blob, "unfallbericht.png");
-                const payload = { content: `🚨 **Neuer Eigenunfall gemeldet**\n**Beamter:** ${document.getElementById('beamter').value}\n**Ort:** ${document.getElementById('ort').value}` };
-                formData.append("payload_json", JSON.stringify(payload));
-                
-                const response = await fetch(webhookURL, { method: 'POST', body: formData });
-                if (response.ok) {
-                    alert("Erfolgreich an Discord gesendet!");
-                } else {
-                    alert("Fehler beim Senden!");
-                }
-                btn.disabled = false; btn.innerText = "BERICHT AN DISCORD SENDEN";
-            }, "image/png");
-        } catch (e) { 
-            alert("Fehler: " + e.message); 
-            btn.disabled = false; 
-            btn.innerText = "BERICHT AN DISCORD SENDEN";
-        }
-    }
-</script>
-</body>
-</html>
+                img.src
