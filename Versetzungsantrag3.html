@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Versetzungsantrag | PNG-Archiv Fix</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        :root { --primary-dark: #1a1a1a; --accent-blue: #0056b3; }
+        body { background-color: #e9ecef; padding: 40px 20px; font-family: 'Segoe UI', sans-serif; }
+        .report-card { max-width: 950px; margin: auto; background: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); }
+        .watermark { color: rgba(211, 47, 47, 0.3); font-size: 11px; text-align: center; border-bottom: 1px solid #eee; margin-bottom: 20px; padding-bottom: 5px; font-weight: bold; text-transform: uppercase; }
+        .report-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary-dark); padding-bottom: 15px; margin-bottom: 25px; }
+        
+        /* Logo-Fix: Kein externes Image-Tag um Tainted Canvas zu vermeiden */
+        .logo-placeholder { 
+            width: 80px; height: 80px; background: #eee; border: 2px solid #333; 
+            display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 10px; text-align: center;
+        }
+
+        .section-title { background: #f1f1f1 !important; padding: 8px 15px; font-weight: bold; text-transform: uppercase; font-size: 0.85rem; margin-top: 25px; border-left: 4px solid var(--accent-blue); }
+        .form-label { font-weight: 700; margin-bottom: 2px; font-size: 0.8rem; color: #333; }
+        .signature-box { border: 1px solid #ced4da; padding: 15px; background: #fdfdfd; border-radius: 4px; margin-top: 10px; }
+        .signature-input { font-family: 'Dancing Script', cursive; font-size: 1.5rem; border: none; border-bottom: 1px solid #ccc; width: 100%; background: transparent; outline: none; text-align: center; }
+        .sub-input { border: none; border-bottom: 1px dashed #ccc; width: 100%; font-size: 0.8rem; text-align: center; margin-top: 5px; outline: none; background: transparent; }
+        @media print { .no-print { display: none !important; } .report-card { box-shadow: none !important; border: none !important; width: 100% !important; padding: 10mm !important; } }
+    </style>
+</head>
+<body>
+
+<div id="captureArea" style="padding: 10px;">
+    <div class="report-card">
+        <div class="watermark">GTA Roleplay Archiv-System - Freistaat Sachsen</div>
+        <div class="report-header">
+            <div class="d-flex align-items-center">
+                <div class="logo-placeholder me-3">POLIZEI<br>SACHSEN</div>
+                <div>
+                    <h2 class="mb-0">VERSETZUNGSANTRAG</h2>
+                    <small class="text-muted fw-bold">LANDESPOLIZEIDIREKTION | PERSONAL</small>
+                </div>
+            </div>
+            <div class="text-end">
+                <input type="text" id="antragID" class="form-control form-control-sm mb-1" placeholder="Antrags-ID">
+                <input type="text" class="form-control form-control-sm" id="currentDate">
+            </div>
+        </div>
+
+        <form>
+            <div class="section-title">Daten des Antragstellers</div>
+            <div class="row g-3 mt-1">
+                <div class="col-md-6"><label class="form-label">Name, Vorname</label><input type="text" id="name" class="form-control"></div>
+                <div class="col-md-3"><label class="form-label">Dienstnummer</label><input type="text" id="dn" class="form-control"></div>
+                <div class="col-md-3"><label class="form-label">Dienstgrad</label><input type="text" class="form-control"></div>
+                <div class="col-md-6"><label class="form-label">Aktuelle Einheit</label><input type="text" class="form-control"></div>
+                <div class="col-md-6"><label class="form-label">Ziel-Einheit</label><input type="text" id="ziel" class="form-control"></div>
+            </div>
+
+            <div class="section-title">Begründung</div>
+            <div class="mt-2"><textarea id="grund" class="form-control" rows="4"></textarea></div>
+
+            <div class="section-title">Unterschriften</div>
+            <div class="row g-3 mt-1">
+                <div class="col-md-4"><div class="signature-box text-center"><label class="form-label small">Antragsteller</label><input type="text" class="signature-input"><input type="text" class="sub-input" placeholder="DN"></div></div>
+                <div class="col-md-4"><div class="signature-box text-center"><label class="form-label small">Abteilungsleitung</label><input type="text" class="signature-input"><input type="text" class="sub-input" placeholder="DN"></div></div>
+                <div class="col-md-4"><div class="signature-box text-center"><label class="form-label small">Dienststellenleitung</label><input type="text" class="signature-input"><input type="text" class="sub-input" placeholder="DN"></div></div>
+            </div>
+
+            <div class="text-center mt-5 no-print">
+                <button type="button" id="sendBtn" class="btn btn-danger btn-lg px-5 shadow" onclick="captureAndSend()">
+                    PNG AN DISCORD SENDEN
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('currentDate').value = new Date().toLocaleDateString('de-DE');
+
+    async function captureAndSend() {
+        const webhookURL = "https://discord.com/api/webhooks/1480442917041733742/quLn7sjvvXlpz5g-Mu5v-8T5Ywe6wnpqW--xbtsDmdg3Jw2x7Qg-gTl8U92tDb2ZtuDi"; // <--- HIER WEBHOOK EINTRAGEN
+        
+        if (webhookURL.includes("DEINE_DISCORD_URL")) return alert("Bitte Webhook-URL im Code eintragen!");
+
+        const btn = document.getElementById('sendBtn');
+        btn.disabled = true;
+        btn.innerText = "Sende...";
+
+        // Wir nutzen "logging: false" und entfernen das Bild-Tag für den Export
+        try {
+            const canvas = await html2canvas(document.getElementById('captureArea'), {
+                scale: 2,
+                backgroundColor: "#e9ecef"
+            });
+
+            canvas.toBlob(async (blob) => {
+                const formData = new FormData();
+                formData.append("file", blob, "versetzungsantrag.png");
+                
+                const payload = {
+                    content: `📌 **Versetzungsantrag archiviert**\n**Name:** ${document.getElementById('name').value}\n**Ziel:** ${document.getElementById('ziel').value}`
+                };
+                formData.append("payload_json", JSON.stringify(payload));
+
+                const response = await fetch(webhookURL, { method: 'POST', body: formData });
+                
+                if (response.ok) {
+                    alert("Erfolgreich als PNG archiviert!");
+                    window.print();
+                } else {
+                    alert("Fehler beim Senden!");
+                }
+                btn.disabled = false;
+                btn.innerText = "PNG AN DISCORD SENDEN";
+            }, "image/png");
+        } catch (e) {
+            alert("Fehler: " + e.message);
+            btn.disabled = false;
+        }
+    }
+</script>
+</body>
+</html>
