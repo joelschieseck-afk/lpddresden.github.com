@@ -13,9 +13,8 @@
         .header-logo { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 3px solid var(--primary-color); }
         .section-title { font-size: 1.1rem; font-weight: 700; color: var(--primary-color); margin-top: 25px; margin-bottom: 15px; display: flex; align-items: center; }
         .section-title::after { content: ""; flex: 1; height: 1px; background: #e0e0e0; margin-left: 15px; }
-        .auto-scale-wrapper { width: 100%; border: 1px solid #ced4da; border-radius: 8px; background: #fff; padding: 12px; overflow: hidden; display: flex; flex-direction: column; }
-        .auto-scale-textarea { width: 100%; border: none; outline: none; resize: none; overflow: hidden; display: block; font-size: 16px; line-height: 1.4; min-height: 100px; }
-        .large-area { min-height: 200px; }
+        .auto-scale-wrapper { width: 100%; border: 1px solid #ced4da; border-radius: 8px; background: #fff; padding: 12px; }
+        .auto-scale-textarea { width: 100%; border: none; outline: none; resize: none; font-size: 16px; min-height: 100px; }
         #imagePreviewContainer { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
         .preview-img { width: 100%; height: auto; border-radius: 8px; border: 1px solid #ddd; }
         .upload-area { border: 2px dashed #003366; padding: 20px; text-align: center; border-radius: 8px; background: #f0f4f8; cursor: pointer; }
@@ -40,12 +39,12 @@
             <div class="section-title">Beteiligte & Fahrzeug</div>
             <div class="row g-3">
                 <div class="col-md-6"><label class="form-label fw-bold">Beteiligter Beamter</label><input type="text" id="beamter" class="form-control"></div>
-                <div class="col-md-6"><label class="form-label fw-bold">Dienstnummer</label><input type="text" class="form-control"></div>
+                <div class="col-md-6"><label class="form-label fw-bold">Dienstnummer</label><input type="text" id="dn" class="form-control"></div>
             </div>
 
             <div class="section-title">Schaden & Hergang</div>
             <div class="col-12"><label class="form-label fw-bold">Unfallhergang</label>
-                <div class="auto-scale-wrapper"><textarea class="auto-scale-textarea large-area" id="hergang"></textarea></div>
+                <div class="auto-scale-wrapper"><textarea class="auto-scale-textarea" id="hergang"></textarea></div>
             </div>
 
             <div class="section-title">Dokumentation</div>
@@ -65,13 +64,14 @@
 </div>
 
 <script>
-    // Funktion zum Schließen des Tablets (Signal an FiveM)
+    // WICHTIG: Die Funktion zum Schließen muss exakt so heißen wie im Tablet-Script registriert
     function closeTablet() {
+        console.log("Sende Exit-Signal an FiveM...");
         fetch(`https://${GetParentResourceName()}/exit`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json; charset=UTF-8' },
             body: JSON.stringify({})
-        });
+        }).catch(err => console.log("Fehler beim Senden des Exit-Signals: " + err));
     }
 
     window.onload = function() {
@@ -87,4 +87,68 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = document.createElement('img');
-                img.src
+                img.src = e.target.result;
+                img.classList.add('preview-img');
+                previewContainer.appendChild(img);
+            }
+            reader.readAsDataURL(files[i]);
+        }
+    }
+
+    async function captureAndSend() {
+        const webhookURL = "https://discord.com/api/webhooks/1480442917041733742/quLn7sjvvXlpz5g-Mu5v-8T5Ywe6wnpqW--xbtsDmdg3Jw2x7Qg-gTl8U92tDb2ZtuDi";
+        const btn = document.getElementById('sendBtn');
+        
+        btn.disabled = true; 
+        btn.innerText = "Verarbeite Bild...";
+
+        try {
+            // Screenshot vom Bereich erstellen
+            const canvas = await html2canvas(document.getElementById('captureArea'), { 
+                scale: 2,
+                useCORS: true, // Wichtig falls externe Bilder genutzt werden
+                logging: true 
+            });
+
+            btn.innerText = "Sende an Discord...";
+
+            canvas.toBlob(async (blob) => {
+                if (!blob) {
+                    btn.innerText = "Fehler: Bild-Export fehlgeschlagen";
+                    btn.disabled = false;
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append("file", blob, "unfallbericht.png");
+                
+                const payload = { 
+                    content: `🚨 **Neuer Eigenunfall gemeldet**\n**Beamter:** ${document.getElementById('beamter').value || 'Nicht angegeben'}\n**Ort:** ${document.getElementById('ort').value || 'Unbekannt'}` 
+                };
+                formData.append("payload_json", JSON.stringify(payload));
+                
+                const response = await fetch(webhookURL, { 
+                    method: 'POST', 
+                    body: formData 
+                });
+                
+                if (response.ok) {
+                    btn.innerText = "ERFOLGREICH GESENDET!";
+                    btn.className = "btn btn-success btn-lg shadow";
+                    // Kurze Pause, dann schließen
+                    setTimeout(() => { closeTablet(); }, 2000);
+                } else {
+                    btn.innerText = "Webhook-Fehler!";
+                    btn.className = "btn btn-warning btn-lg shadow";
+                    btn.disabled = false;
+                }
+            }, "image/png");
+        } catch (e) { 
+            console.error("Fehler in captureAndSend:", e);
+            btn.innerText = "Technischer Fehler!";
+            btn.disabled = false;
+        }
+    }
+</script>
+</body>
+</html>
