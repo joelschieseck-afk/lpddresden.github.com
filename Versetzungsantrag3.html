@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Versetzungsantrag | PNG-Archiv Fix</title>
+    <title>Versetzungsantrag | LPD Dresden</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
@@ -19,7 +19,6 @@
         .signature-box { border: 1px solid #ced4da; padding: 15px; background: #fdfdfd; border-radius: 4px; margin-top: 10px; }
         .signature-input { font-family: 'Dancing Script', cursive; font-size: 1.5rem; border: none; border-bottom: 1px solid #ccc; width: 100%; background: transparent; outline: none; text-align: center; }
         .sub-input { border: none; border-bottom: 1px dashed #ccc; width: 100%; font-size: 0.8rem; text-align: center; margin-top: 5px; outline: none; background: transparent; }
-        .no-print { display: block; }
     </style>
 </head>
 <body>
@@ -61,7 +60,7 @@
                 <div class="col-md-4"><div class="signature-box text-center"><label class="form-label small">Dienststellenleitung</label><input type="text" class="signature-input"><input type="text" class="sub-input" placeholder="DN"></div></div>
             </div>
 
-            <div class="text-center mt-5 no-print">
+            <div class="text-center mt-5">
                 <button type="button" id="sendBtn" class="btn btn-danger btn-lg px-5 shadow" onclick="captureAndSend()">
                     PNG AN DISCORD SENDEN
                 </button>
@@ -71,13 +70,20 @@
 </div>
 
 <script>
+    function closeTablet() {
+        fetch(`https://${GetParentResourceName()}/exit`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+            body: JSON.stringify({})
+        });
+    }
+
     document.getElementById('currentDate').value = new Date().toLocaleDateString('de-DE');
 
     async function captureAndSend() {
         const webhookURL = "https://discord.com/api/webhooks/1480442917041733742/quLn7sjvvXlpz5g-Mu5v-8T5Ywe6wnpqW--xbtsDmdg3Jw2x7Qg-gTl8U92tDb2ZtuDi";
         const btn = document.getElementById('sendBtn');
-        btn.disabled = true;
-        btn.innerText = "Sende...";
+        btn.disabled = true; btn.innerText = "Sende...";
 
         try {
             const canvas = await html2canvas(document.getElementById('captureArea'), {
@@ -88,26 +94,23 @@
             canvas.toBlob(async (blob) => {
                 const formData = new FormData();
                 formData.append("file", blob, "versetzungsantrag.png");
-                
-                const payload = {
-                    content: `📌 **Versetzungsantrag archiviert**\n**Name:** ${document.getElementById('name').value}\n**Ziel:** ${document.getElementById('ziel').value}`
-                };
+                const payload = { content: `📌 **Versetzungsantrag archiviert**\n**Name:** ${document.getElementById('name').value}\n**Ziel:** ${document.getElementById('ziel').value}` };
                 formData.append("payload_json", JSON.stringify(payload));
 
                 const response = await fetch(webhookURL, { method: 'POST', body: formData });
                 
                 if (response.ok) {
-                    alert("Erfolgreich an Discord gesendet!");
+                    btn.innerText = "ERFOLGREICH ARCHIVIERT!";
+                    btn.style.backgroundColor = "green";
+                    setTimeout(() => { closeTablet(); }, 2000);
                 } else {
-                    alert("Fehler beim Senden!");
+                    btn.innerText = "FEHLER!";
+                    btn.disabled = false;
                 }
-                btn.disabled = false;
-                btn.innerText = "PNG AN DISCORD SENDEN";
             }, "image/png");
         } catch (e) {
-            alert("Fehler: " + e.message);
             btn.disabled = false;
-            btn.innerText = "PNG AN DISCORD SENDEN";
+            btn.innerText = "FEHLER!";
         }
     }
 </script>
