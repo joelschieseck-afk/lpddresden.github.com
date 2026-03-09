@@ -19,7 +19,7 @@
         #imagePreviewContainer { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
         .preview-img { width: 100%; height: auto; border-radius: 8px; border: 1px solid #ddd; }
         .upload-area { border: 2px dashed #003366; padding: 20px; text-align: center; border-radius: 8px; background: #f0f4f8; cursor: pointer; }
-        @media print { .no-print { display: none !important; } .report-card { box-shadow: none; border: none; width: 100%; max-width: 100%; padding: 0; } }
+        .no-print { display: block; }
     </style>
 </head>
 <body>
@@ -58,7 +58,7 @@
 
             <div class="col-12 text-center mt-5 no-print">
                 <button type="button" id="sendBtn" class="btn btn-primary btn-lg shadow" onclick="captureAndSend()">
-                    BERICHT AN DISCORD SENDEN & SPEICHERN
+                    BERICHT AN DISCORD SENDEN
                 </button>
             </div>
         </form>
@@ -100,12 +100,19 @@
                 const payload = { content: `🚨 **Neuer Eigenunfall gemeldet**\n**Beamter:** ${document.getElementById('beamter').value}\n**Ort:** ${document.getElementById('ort').value}` };
                 formData.append("payload_json", JSON.stringify(payload));
                 
-                await fetch(webhookURL, { method: 'POST', body: formData });
-                alert("Erfolgreich an Discord gesendet!");
-                window.print();
-                btn.disabled = false; btn.innerText = "BERICHT AN DISCORD SENDEN & SPEICHERN";
+                const response = await fetch(webhookURL, { method: 'POST', body: formData });
+                if (response.ok) {
+                    alert("Erfolgreich an Discord gesendet!");
+                } else {
+                    alert("Fehler beim Senden!");
+                }
+                btn.disabled = false; btn.innerText = "BERICHT AN DISCORD SENDEN";
             }, "image/png");
-        } catch (e) { alert("Fehler: " + e.message); btn.disabled = false; }
+        } catch (e) { 
+            alert("Fehler: " + e.message); 
+            btn.disabled = false; 
+            btn.innerText = "BERICHT AN DISCORD SENDEN";
+        }
     }
 </script>
 </body>
