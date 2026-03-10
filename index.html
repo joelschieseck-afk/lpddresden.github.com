@@ -5,16 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Freistaat Netzwerk | RP WEBSITE</title>
 
-    <!-- ============================================================
-         GOOGLE FONTS
-    ============================================================ -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
-        /* ============================================================
-           1. CSS VARIABLEN & RESET
-        ============================================================ */
+        /* === 1. VARIABLEN & RESET === */
         :root {
             --police-blue:  #00237e;
             --accent-gold:  #d4af37;
@@ -28,9 +23,7 @@
             --text-muted:   #7a8099;
             --font-display: 'Rajdhani', sans-serif;
             --font-body:    'Source Sans 3', sans-serif;
-
-            /* Gesamthöhe des fixierten Headers – wird per JS gesetzt */
-            --header-h: 108px;
+            --header-h:     108px;
         }
 
         body.light-mode {
@@ -49,16 +42,14 @@
             background: var(--page-bg);
             color: var(--text);
             scroll-behavior: smooth;
-            overflow: hidden; /* Startseite: kein Scrollen */
+            overflow: hidden;
             transition: background .3s, color .3s;
         }
 
         a { cursor: pointer; }
 
 
-        /* ============================================================
-           2. FIXIERTER HEADER (Warning-Bar + Navigation)
-        ============================================================ */
+        /* === 2. FIXIERTER HEADER === */
         #site-header {
             position: fixed;
             top: 0; left: 0;
@@ -66,7 +57,6 @@
             z-index: 1000;
         }
 
-        /* 2a. Warning-Banner */
         .warning-bar {
             background: var(--dark-bg);
             color: #fff;
@@ -79,7 +69,6 @@
             border-bottom: 2px solid var(--accent-gold);
         }
 
-        /* 2b. Navigationsleiste */
         nav {
             height: 68px;
             background: var(--nav-bg);
@@ -100,10 +89,16 @@
             padding-left: 14px;
             line-height: 1.2;
             text-transform: uppercase;
+            flex-shrink: 0;
         }
         .logo span { color: var(--accent-gold); font-size: .68rem; font-weight: 500; display: block; }
 
-        .nav-links { display: flex; align-items: center; gap: 6px; }
+        /* Desktop-Nav */
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
 
         .nav-btn {
             font-family: var(--font-display);
@@ -123,7 +118,7 @@
         .nav-btn:hover { color: var(--accent-gold); background: rgba(212,175,55,.1); }
         .nav-btn.danger { color: var(--warning-red); }
 
-        /* Dropdown-Menü */
+        /* Dropdown (Desktop) */
         .dropdown { position: relative; }
 
         .dropdown-content {
@@ -150,11 +145,76 @@
         .dropdown-content a:last-child { border-bottom: none; }
         .dropdown-content a:hover { background: var(--police-blue); color: #fff; }
 
+        /* === HAMBURGER-MENÜ (Mobile) === */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--text);
+            transition: transform .3s, opacity .3s;
+        }
+        .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-        /* ============================================================
-           3. STARTSEITE – HERO
-           Füllt exakt den Bereich unterhalb des Headers aus.
-        ============================================================ */
+        /* Mobiles Slide-In-Menü */
+        #mobile-menu {
+            display: none;
+            position: fixed;
+            top: var(--header-h);
+            left: 0;
+            width: 100%;
+            height: calc(100vh - var(--header-h));
+            background: var(--nav-bg);
+            overflow-y: auto;
+            z-index: 999;
+            padding: 16px 0 40px;
+            border-top: 1px solid var(--border);
+        }
+        #mobile-menu.open { display: block; }
+
+        .mobile-nav-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 14px 24px;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            color: var(--text);
+            background: none;
+            border: none;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: color .2s, background .2s;
+        }
+        .mobile-nav-btn:hover,
+        .mobile-nav-btn:active { color: var(--accent-gold); background: rgba(212,175,55,.08); }
+        .mobile-nav-btn.danger { color: var(--warning-red); }
+        .mobile-nav-btn.sub    { padding-left: 42px; font-size: .88rem; color: var(--text-muted); }
+        .mobile-nav-btn.sub:hover { color: var(--accent-gold); }
+        .mobile-section-label  {
+            padding: 10px 24px 4px;
+            font-family: var(--font-display);
+            font-size: .72rem;
+            letter-spacing: .1em;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+        }
+
+
+        /* === 3. HERO === */
         #hero {
             position: fixed;
             top: var(--header-h);
@@ -167,10 +227,10 @@
             align-items: center;
             justify-content: flex-start;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             z-index: 0;
         }
 
-        /* Dunkel-Overlay über dem Hintergrundbild */
         #hero::before {
             content: '';
             position: fixed;
@@ -187,7 +247,6 @@
             z-index: 0;
         }
 
-        /* Titel: Herzlich Willkommen */
         .hero-title {
             position: relative;
             z-index: 1;
@@ -211,7 +270,6 @@
             margin-top: 5px;
         }
 
-        /* Informationskasten auf der Startseite */
         .hero-box {
             position: relative;
             z-index: 1;
@@ -224,7 +282,6 @@
             backdrop-filter: blur(8px);
         }
 
-        /* Wasserzeichen-Logo im Kasten */
         .hero-box::before {
             content: "";
             position: absolute;
@@ -236,9 +293,7 @@
         }
 
 
-        /* ============================================================
-           4. INHALTSSEITEN (alle außer Startseite)
-        ============================================================ */
+        /* === 4. INHALTSSEITEN === */
         #page-wrapper {
             display: none;
             padding-top: var(--header-h);
@@ -266,11 +321,8 @@
         }
 
 
-        /* ============================================================
-           5. WIEDERVERWENDBARE KOMPONENTEN
-        ============================================================ */
+        /* === 5. KOMPONENTEN === */
 
-        /* Info-Karten */
         .grid-3 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -295,7 +347,6 @@
         }
         .info-card p { font-size: .84rem; line-height: 1.45; }
 
-        /* Gesetze-Raster */
         .law-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -315,7 +366,6 @@
         }
         .law-item:hover { background: var(--accent-gold); color: #000; border-color: #fff; }
 
-        /* Mitarbeiter-Karten */
         .staff-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
 
         .staff-card {
@@ -338,9 +388,8 @@
         .staff-avatar img { width: 100%; height: 100%; object-fit: cover; }
         .staff-card h4 { font-family: var(--font-display); font-size: 1.05rem; margin-bottom: 4px; }
         .staff-card p  { font-size: .82rem; color: var(--accent-gold); }
-        .staff-card h1  { font-size: .82rem; color: var(--accent-gold); }
+        .staff-card h1 { font-size: .82rem; color: var(--accent-gold); }
 
-        /* iFrame für interne Dokumente */
         .doc-frame {
             width: 100%;
             height: 70vh;
@@ -348,7 +397,6 @@
             margin-top: 16px;
         }
 
-        /* Impressum / Info-Block */
         .info-block {
             background: var(--card-bg);
             border-radius: 4px;
@@ -365,9 +413,7 @@
         }
 
 
-        /* ============================================================
-           6. FOOTER
-        ============================================================ */
+        /* === 6. FOOTER === */
         #site-footer {
             display: none;
             text-align: center;
@@ -378,9 +424,7 @@
         }
 
 
-        /* ============================================================
-           7. LOGIN-OVERLAY
-        ============================================================ */
+        /* === 7. LOGIN-OVERLAY === */
         #login-overlay {
             position: fixed; inset: 0;
             background: rgba(0,0,0,.92);
@@ -395,6 +439,7 @@
             border: 1px solid var(--accent-gold);
             padding: 40px;
             width: 340px;
+            max-width: 90vw;
             text-align: center;
         }
         .login-box h3 { font-family: var(--font-display); color: var(--accent-gold); margin-bottom: 16px; font-size: 1.2rem; }
@@ -420,26 +465,90 @@
         }
 
 
-        /* ============================================================
-           8. ANIMATIONEN
-        ============================================================ */
+        /* === 8. ANIMATIONEN === */
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(22px); }
             to   { opacity: 1; transform: translateY(0); }
         }
         .anim { animation: fadeUp .45s ease-out forwards; }
+
+
+        /* === 9. MOBILE RESPONSIVE === */
+        @media (max-width: 768px) {
+            /* Warning-Bar kürzer auf Mobile */
+            .warning-bar {
+                font-size: .7rem;
+                padding: 5px 10px;
+                letter-spacing: .03em;
+            }
+
+            nav { height: 56px; padding: 0 5%; }
+
+            .logo { font-size: 1rem; }
+            .logo span { font-size: .6rem; }
+
+            /* Desktop-Nav verstecken, Hamburger zeigen */
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+
+            /* Hero */
+            .hero-title h2 { font-size: 1.9rem; }
+            .hero-title p  { font-size: .9rem; }
+            .hero-title    { padding: 24px 16px 0; }
+
+            .hero-box {
+                width: 94%;
+                padding: 20px 18px;
+                margin: 20px auto 30px;
+            }
+
+            /* Abteilungs-Karten: 2 Spalten auf Mobile */
+            .grid-3 {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            /* Inhaltsseiten */
+            .page-container {
+                margin: 16px 12px 50px;
+                padding: 22px 18px;
+            }
+
+            .page-container h2 { font-size: 1.4rem; }
+
+            /* Staff-Karten: 2 Spalten */
+            .staff-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            .staff-avatar { width: 80px; height: 80px; }
+
+            /* Gesetze: 3 Spalten auf Mobile */
+            .law-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .law-item  { padding: 10px 6px; font-size: .8rem; }
+
+            /* iFrame etwas kleiner */
+            .doc-frame { height: 55vh; }
+
+            /* Info-Block Padding */
+            .info-block { padding: 16px; }
+        }
+
+        @media (max-width: 420px) {
+            .hero-title h2 { font-size: 1.5rem; }
+            .grid-3        { grid-template-columns: 1fr; }
+            .staff-grid    { grid-template-columns: 1fr; }
+            .law-grid      { grid-template-columns: repeat(2, 1fr); }
+        }
     </style>
 </head>
 <body>
 
-<!-- ================================================================
-     HEADER: Warning-Bar + Navigation
-================================================================ -->
+<!-- HEADER -->
 <header id="site-header">
 
     <div class="warning-bar">
-        ⚠ Achtung: Dieses Portal dient ausschließlich zu Roleplay-Zwecken auf einem FiveM (GTA 5) Server
-        und steht in keiner Verbindung zur realen Polizei Sachsen. ⚠
+        ⚠ Dieses Portal dient ausschließlich zu Roleplay-Zwecken (FiveM / GTA 5) – kein Bezug zur realen Polizei Sachsen. ⚠
     </div>
 
     <nav>
@@ -448,12 +557,11 @@
             <span>| Roleplay Website</span>
         </div>
 
+        <!-- Desktop Navigation -->
         <div class="nav-links">
-
             <button class="nav-btn" onclick="toggleTheme()">🌓 Modus</button>
             <button class="nav-btn" onclick="showPage('start')">Startseite</button>
 
-            <!-- Informationen -->
             <div class="dropdown">
                 <button class="nav-btn">Informationen ▾</button>
                 <div class="dropdown-content">
@@ -465,7 +573,6 @@
                 </div>
             </div>
 
-            <!-- Mitarbeiter Intern -->
             <div class="dropdown">
                 <button class="nav-btn">Mitarbeiter Intern 🔒 ▾</button>
                 <div class="dropdown-content">
@@ -480,7 +587,6 @@
                 </div>
             </div>
 
-            <!-- Abteilungsleitung Intern -->
             <div class="dropdown">
                 <button class="nav-btn">Abteilungsleitung Intern 🔒 ▾</button>
                 <div class="dropdown-content">
@@ -494,13 +600,48 @@
             <button class="nav-btn" onclick="showPage('kontakt')">Kontakt</button>
             <button class="nav-btn danger" onclick="showPage('impressum')">Impressum</button>
         </div>
+
+        <!-- Hamburger Button (Mobile) -->
+        <button class="hamburger" id="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Menü öffnen">
+            <span></span><span></span><span></span>
+        </button>
     </nav>
 </header>
 
+<!-- Mobiles Menü -->
+<div id="mobile-menu">
+    <button class="mobile-nav-btn" onclick="mobileNav('start')">🏠 Startseite</button>
+    <button class="mobile-nav-btn" onclick="toggleTheme(); closeMobileMenu()">🌓 Modus wechseln</button>
 
-<!-- ================================================================
-     STARTSEITE – Hero mit Hintergrundbild
-================================================================ -->
+    <div class="mobile-section-label">Informationen</div>
+    <button class="mobile-nav-btn sub" onclick="mobileNav('bewerbung')">Bewerbung</button>
+    <button class="mobile-nav-btn sub" onclick="mobileNav('laufbahn')">Laufbahngruppe</button>
+    <button class="mobile-nav-btn sub" onclick="mobileNav('raenge')">Ränge und Aufgaben</button>
+    <button class="mobile-nav-btn sub" onclick="mobileNav('leitung')">Leitungsstab</button>
+    <button class="mobile-nav-btn sub" onclick="mobileNav('gesetze')">Gesetze &amp; Verordnungen</button>
+
+    <div class="mobile-section-label">Mitarbeiter Intern 🔒</div>
+    <button class="mobile-nav-btn sub" id="mobile-trigger-intern" onclick="openLogin('intern'); closeMobileMenu()">Mitarbeiter Login</button>
+    <div id="mobile-intern-menu" style="display:none;">
+        <button class="mobile-nav-btn sub" onclick="mobileNav('dokumente2')">Interne Dokumente</button>
+        <button class="mobile-nav-btn sub" onclick="mobileNav('mitarbeiterliste')">Mitarbeiterliste</button>
+        <button class="mobile-nav-btn sub" onclick="mobileNav('fuhrpark')">Fuhrpark</button>
+        <button class="mobile-nav-btn sub" onclick="mobileNav('ausbildung')">Ausbildungskatalog</button>
+        <button class="mobile-nav-btn sub" onclick="mobileNav('dokumente')">Eigenunfall-Dokument</button>
+    </div>
+
+    <div class="mobile-section-label">Abteilungsleitung Intern 🔒</div>
+    <button class="mobile-nav-btn sub" id="mobile-trigger-leiter" onclick="openLogin('leiter'); closeMobileMenu()">Abteilungsleiter Login</button>
+    <div id="mobile-leiter-menu" style="display:none;">
+        <button class="mobile-nav-btn sub" onclick="mobileNav('leiterdocs')">Versetzungsantrag</button>
+    </div>
+
+    <button class="mobile-nav-btn" onclick="mobileNav('kontakt')">Kontakt</button>
+    <button class="mobile-nav-btn danger" onclick="mobileNav('impressum')">Impressum</button>
+</div>
+
+
+<!-- HERO (Startseite) -->
 <div id="hero">
 
     <div class="hero-title">
@@ -528,32 +669,30 @@
         <div class="grid-3">
             <div class="info-card">
                 <h4>DirGEV</h4>
-                <p>Rückgrat der sichtbaren Polizeiarbeit. Koordination von Einsätzen, Streifen und Verkehrsüberwachung – immer präsent und einsatzbereit.</p>
+                <p>Sichtbare Polizeiarbeit: Einsatzkoordination, Streifen und Verkehrsüberwachung.</p>
             </div>
             <div class="info-card">
                 <h4>DirZA</h4>
-                <p>Organisatorisches Herz der Landespolizei: Personalmanagement, Technik, Ausbildung, Öffentlichkeitsarbeit und Leitstelle.</p>
+                <p>Organisatorisches Herz: Personal, Technik, Ausbildung, Öffentlichkeitsarbeit und Leitstelle.</p>
             </div>
             <div class="info-card">
                 <h4>DirBA</h4>
-                <p>Spezialisierte Einheiten für besondere Lagen – SEK, Personenschutz und taktische Unterstützung.</p>
+                <p>Spezialeinsätze: SEK, Personenschutz und taktische Unterstützung bei besonderen Lagen.</p>
             </div>
             <div class="info-card">
                 <h4>KI6</h4>
-                <p>Kriminalpolizeiinspektion für schwere Delikte: organisierte Kriminalität, Kapitalverbrechen und Cybercrime.</p>
+                <p>Kriminalpolizei für schwere Delikte: Organisierte Kriminalität, Kapitalverbrechen und Cybercrime.</p>
             </div>
         </div>
 
         <p style="font-size:.84rem; margin-top:14px; color:var(--text-muted);">
-            Unsere Mission Die Landespolizei Freistaat Sachsen steht für ein sicheres Miteinander. Wir setzen auf Transparenz, Teamgeist und Professionalität – im Dienst für die Bürgerinnen und Bürger sowie im engen Austausch mit unseren Partnerbehörden. Gemeinsam gestalten wir eine sichere Zukunft für Sachsen.
+            Wir setzen auf Transparenz, Teamgeist und Professionalität – im Dienst für die Bürgerinnen und Bürger sowie im engen Austausch mit unseren Partnerbehörden.
         </p>
     </div>
 </div>
 
 
-<!-- ================================================================
-     INHALTSSEITEN (alle Seiten außer Startseite)
-================================================================ -->
+<!-- INHALTSSEITEN -->
 <div id="page-wrapper">
     <div class="page-container anim">
 
@@ -572,7 +711,7 @@
                         <img src="https://media.discordapp.net/attachments/1480834623637422221/1480834647070867478/Stolte.png?ex=69b11e3c&is=69afccbc&hm=8944bd139eedd6f6033527426fa3bf3008ed106faf0d1da3853818d69d1aa73e&=&format=webp&quality=lossless&width=1640&height=856" alt="Joel Stolte">
                     </div>
                     <h4>Joel Stolte</h4>
-                    <h1>Dienstnummer: DD-02</p>
+                    <h1>Dienstnummer: DD-02</h1>
                     <p>Stellvertretender Inspekteur der Landespolizei</p>
                 </div>
                 <div class="staff-card">
@@ -614,45 +753,29 @@
 
         <!-- Bewerbungen -->
         <div id="bewerbung" class="sub-page" style="display:none;">
-            <h2>Stellenausschreibung - Deine Karriere bei der Landespolizei Freistaat Sachsen! (Roleplay Server)</h2>
-            
-            <p>Die Landespolizei sucht Verstärkung!</p>
+            <h2>Stellenausschreibung – Karriere bei der Landespolizei Freistaat Sachsen</h2>
 
-            <p>Die Landespolizei  Weserhafen bietet verantwortungsvolle Positionen in unterschiedlichen Direktionen und Abteilungen. Wir suchen motivierte, durchsetzungsstarke und teamorientierte Persönlichkeiten, die unsere Organisation in der täglichen Polizeiarbeit stärken und weiterentwickeln.</p>
+            <p>Die Landespolizei sucht Verstärkung für unterschiedliche Direktionen und Abteilungen. Wir suchen motivierte, durchsetzungsstarke und teamorientierte Persönlichkeiten.</p>
 
-            <p>Mittlerer Dienst:</p>
+            <p><strong>Mittlerer Dienst – Ihr Profil:</strong></p>
+            <p>• Schulabschluss der mittleren Reife o. vergleichbar</p>
+            <p>• Mindestalter von 17 Jahren (IC) / 15 (OOC)</p>
+            <p>• Ehrgeiz, Disziplin und Durchsetzungskraft</p>
+            <p>• Aktivität, Belastbarkeit und Teamgeist</p>
 
-            <p>Ihr Profil:</p>
-            <p>•    Schulabschluss der mittleren Reife o. vergleichbar</p>    
-            <p>•    Mindestalter von 17 Jahren (IC) / 15 (OOC)</p>    
-            <p>•   Ehrgeiz, Disziplin und Durchsetzungskraft</p>    
-            <p>•   Aktivität</p>    
-            <p>•   Belastbarkeit und Teamgeist</p>    
+            <p><strong>Wir bieten:</strong></p>
+            <p>• Verantwortungsvolle und abwechslungsreiche Tätigkeit</p>
+            <p>• Attraktive Karriere- und Entwicklungsmöglichkeiten</p>
+            <p>• Beamtenrechtliche Besoldung</p>
+            <p>• Vielfältige Fort- und Weiterbildungsangebote</p>
 
-            <p></p>Wir bieten:
-            <p></p>    •    Eine verantwortungsvolle und abwechslungsreiche Tätigkeit in einem modernen Polizeiapparat
-            <p></p>    •    Attraktive Karriere- und Entwicklungsmöglichkeiten
-            <p></p>    •    Beamtenrechtliche Besoldung entsprechend Ihrer Laufbahn und Funktion
-            <p></p>    •    Vielfältige Fort- und Weiterbildungsangebote
+            <p><strong>Bewerbung:</strong> Eröffne ein Bewerbungsticket und vereinbare einen Termin für ein mündliches Bewerbungsgespräch.</p>
 
-            <p>Bewerbung:</p>
-            <p>Eröffnen sie eine Bewerbungsticket und lassen sie sich ein Termin für ein mündliches Bewerbungsgespräch geben.</p>
+            <p style="color:var(--warning-red);"><strong>Bewerbungen für den gehobenen Dienst sind derzeit geschlossen.</strong></p>
 
-            <p>Bewerbungen für den gehobenen Dienst sind geschlossen</p>
-
-            <p>Wir wünschen ihnen Viel Glück!</p>
-
-            <p>Mit Freundlichen Grüßen,</p>
-
-            <p>Nolan Shelby</p>
-            <p>Inspekteur der Landespolizei</p>
-            <p>Leitungsstab Polizeipräsidium</p>
-            <p>Landespolizei Sachsen
-</p>
-            <p>Joel Stolte</p>
-            <p>Stellv. Inspekteur der Landespolizei</p>
-            <p>Leitungsstab Polizeipräsidium</p>
-            <p>Landespolizei Sachsen</p>
+            <p>Mit freundlichen Grüßen,</p>
+            <p>Nolan Shelby – Inspekteur der Landespolizei</p>
+            <p>Joel Stolte – Stellv. Inspekteur der Landespolizei</p>
         </div>
 
         <!-- Laufbahngruppe -->
@@ -667,31 +790,31 @@
             <p>Daten werden geladen…</p>
         </div>
 
-        <!-- Mitarbeiterliste (intern) -->
+        <!-- Mitarbeiterliste -->
         <div id="mitarbeiterliste" class="sub-page" style="display:none;">
             <h2>Mitarbeiterliste</h2>
             <p>Folgt noch…</p>
         </div>
 
-        <!-- Fuhrpark (intern) -->
+        <!-- Fuhrpark -->
         <div id="fuhrpark" class="sub-page" style="display:none;">
             <h2>Fuhrpark</h2>
             <p>Folgt noch…</p>
         </div>
 
-        <!-- Ausbildungskatalog (intern) -->
+        <!-- Ausbildungskatalog -->
         <div id="ausbildung" class="sub-page" style="display:none;">
             <h2>Ausbildungskatalog</h2>
             <p>Folgt noch…</p>
         </div>
 
-        <!-- Eigenunfall-Dokument (intern) -->
+        <!-- Eigenunfall-Dokument -->
         <div id="dokumente" class="sub-page" style="display:none;">
             <h2>Eigenunfall-Dokument</h2>
             <iframe src="Unfall.html" class="doc-frame"></iframe>
         </div>
 
-        <!-- Interne Dokumente (intern) -->
+        <!-- Interne Dokumente -->
         <div id="dokumente2" class="sub-page" style="display:none;">
             <h2>Interne Dokumente</h2>
             <iframe src="https://docs.google.com/document/d/1unLgZGnOX_szQ3YYGCfSswdwcGn8DC390rDZKdMmY3s/edit?usp=drivesdk" class="doc-frame"></iframe>
@@ -699,7 +822,7 @@
             <iframe src="https://docs.google.com/document/d/1JuKzDmUvetr-NDSWAcrhlxwJPOZY3xvrhG7NsJMOk58/edit?usp=sharing" class="doc-frame"></iframe>
         </div>
 
-        <!-- Versetzungsantrag (Abteilungsleitung) -->
+        <!-- Versetzungsantrag -->
         <div id="leiterdocs" class="sub-page" style="display:none;">
             <h2>Versetzungsantrag</h2>
             <iframe src="Versetzungsantrag3.html" class="doc-frame"></iframe>
@@ -735,28 +858,23 @@
                 <p class="warn-box">
                     Dieses Portal steht in <strong>keinerlei Verbindung</strong> zum Freistaat Sachsen, dem Sächsischen
                     Staatsministerium des Innern oder der realen Landespolizei Sachsen. Es handelt sich <strong>NICHT</strong>
-                    um eine offizielle Behördenseite. Eine Verwechslung mit realen polizeilichen Angeboten ist ausdrücklich
-                    nicht beabsichtigt.
+                    um eine offizielle Behördenseite.
                 </p>
             </div>
         </div>
 
-    </div><!-- /.page-container -->
-</div><!-- /#page-wrapper -->
+    </div>
+</div>
 
 
-<!-- ================================================================
-     FOOTER
-================================================================ -->
+<!-- FOOTER -->
 <footer id="site-footer">
     &copy; 2026 Freistaat Netzwerk – Alle Rechte vorbehalten<br>
     Erstellt von .mxte &nbsp;|&nbsp; Kein Bezug zur Realität.
 </footer>
 
 
-<!-- ================================================================
-     LOGIN-OVERLAY
-================================================================ -->
+<!-- LOGIN-OVERLAY -->
 <div id="login-overlay">
     <div class="login-box">
         <h3>Login erforderlich</h3>
@@ -767,29 +885,19 @@
 </div>
 
 
-<!-- ================================================================
-     JAVASCRIPT
-================================================================ -->
 <script>
-    /* ------------------------------------------------------------------
-       Passwort-Hashes (Base64-kodiert)
-    ------------------------------------------------------------------ */
     const HASH_INTERN = "RHJlc2RlbjExMA==";
     const HASH_LEITER = "TGVpdHVuZzIwMjY=";
 
     let currentLoginMode = '';
 
-    /* ------------------------------------------------------------------
-       Header-Höhe als CSS-Variable setzen (damit Hero korrekt positioniert)
-    ------------------------------------------------------------------ */
+    /* Header-Höhe als CSS-Variable */
     function applyHeaderHeight() {
         const h = document.getElementById('site-header').offsetHeight;
         document.documentElement.style.setProperty('--header-h', h + 'px');
     }
 
-    /* ------------------------------------------------------------------
-       Seitennavigation
-    ------------------------------------------------------------------ */
+    /* Seitennavigation */
     function showPage(id) {
         const hero        = document.getElementById('hero');
         const pageWrapper = document.getElementById('page-wrapper');
@@ -801,7 +909,6 @@
             footer.style.display      = 'none';
             document.body.style.overflow = 'hidden';
         } else {
-            /* Alle Sub-Pages verstecken, dann Ziel einblenden */
             document.querySelectorAll('.sub-page').forEach(p => p.style.display = 'none');
             const target = document.getElementById(id);
             if (target) target.style.display = 'block';
@@ -811,7 +918,6 @@
             footer.style.display      = 'block';
             document.body.style.overflow = 'auto';
 
-            /* Einblend-Animation neu starten */
             const container = document.querySelector('.page-container');
             container.classList.remove('anim');
             void container.offsetWidth;
@@ -821,9 +927,25 @@
         }
     }
 
-    /* ------------------------------------------------------------------
-       Login-Overlay
-    ------------------------------------------------------------------ */
+    /* Mobiles Menü */
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobile-menu');
+        const btn  = document.getElementById('hamburger-btn');
+        menu.classList.toggle('open');
+        btn.classList.toggle('open');
+    }
+
+    function closeMobileMenu() {
+        document.getElementById('mobile-menu').classList.remove('open');
+        document.getElementById('hamburger-btn').classList.remove('open');
+    }
+
+    function mobileNav(id) {
+        closeMobileMenu();
+        showPage(id);
+    }
+
+    /* Login */
     function openLogin(mode) {
         currentLoginMode = mode;
         document.getElementById('pw-field').value = '';
@@ -838,14 +960,18 @@
         const encoded = btoa(document.getElementById('pw-field').value);
 
         if (currentLoginMode === 'intern' && encoded === HASH_INTERN) {
-            document.getElementById('intern-menu').style.display   = 'block';
-            document.getElementById('trigger-intern').style.display = 'none';
+            document.getElementById('intern-menu').style.display        = 'block';
+            document.getElementById('trigger-intern').style.display     = 'none';
+            document.getElementById('mobile-intern-menu').style.display = 'block';
+            document.getElementById('mobile-trigger-intern').style.display = 'none';
             closeLogin();
             showPage('dokumente2');
 
         } else if (currentLoginMode === 'leiter' && encoded === HASH_LEITER) {
-            document.getElementById('leiter-menu').style.display   = 'block';
-            document.getElementById('trigger-leiter').style.display = 'none';
+            document.getElementById('leiter-menu').style.display        = 'block';
+            document.getElementById('trigger-leiter').style.display     = 'none';
+            document.getElementById('mobile-leiter-menu').style.display = 'block';
+            document.getElementById('mobile-trigger-leiter').style.display = 'none';
             closeLogin();
             showPage('leiterdocs');
 
@@ -857,26 +983,20 @@
         }
     }
 
-    /* Enter-Taste im Passwortfeld */
     document.getElementById('pw-field').addEventListener('keydown', e => {
         if (e.key === 'Enter') validateLogin();
     });
 
-    /* Overlay schließen beim Klick außerhalb der Box */
     document.getElementById('login-overlay').addEventListener('click', function(e) {
         if (e.target === this) closeLogin();
     });
 
-    /* ------------------------------------------------------------------
-       Theme-Umschalter
-    ------------------------------------------------------------------ */
+    /* Theme */
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
     }
 
-    /* ------------------------------------------------------------------
-       Initialisierung
-    ------------------------------------------------------------------ */
+    /* Init */
     applyHeaderHeight();
     showPage('start');
     window.addEventListener('resize', applyHeaderHeight);
