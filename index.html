@@ -123,11 +123,13 @@
             width: 100%; 
             height: 100%; 
             overflow-y: auto; 
+            /* Neu: Wichtig für die Dokumenten-Zentrierung */
+            padding: 40px 5%;
         }
 
-        /* Neue Klasse für sanftes Erscheinen */
         .active-page { 
-            display: block; 
+            display: flex; /* Neu: Erlaubt Flexbox-Zentrierung */
+            flex-direction: column;
             animation: fadeInPage 0.5s ease-out forwards;
         }
 
@@ -140,7 +142,13 @@
         #start {
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('image_14e7ee.jpg') no-repeat center center;
             background-size: cover;
+            /* Flex-Eigenschaften für Startseite überschreiben */
+            display: none; 
             padding: 40px 20px;
+        }
+        
+        #start.active-page {
+            display: block;
         }
 
         .start-box {
@@ -154,6 +162,33 @@
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255,255,255,0.1);
             box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        /* NEUES DOKUMENTEN-VIEW DESIGN */
+        .document-view-container {
+            flex: 1; /* Nimmt den restlichen vertikalen Platz ein */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        .document-view {
+            width: 100%; /* Volle Breite im Container */
+            height: 100%; /* Volle Höhe im Container */
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            background: #f9f9f9; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            overflow: hidden; /* Wichtig, damit das Iframe abgerundete Ecken hat */
+        }
+        
+        iframe { 
+            width: 100%; 
+            height: 100%; 
+            border: none; 
+            display: block; /* Verhindert seltsame Abstände unten */
         }
 
         /* CARDS HOVER */
@@ -266,7 +301,7 @@
             </div>
         </div>
 
-        <div id="leitung" class="content-page standard-page">
+        <div id="leitung" class="content-page">
             <h1>Leitungsstab</h1>
             <p><strong>Die Aufgaben des Leitungsstabs:</strong></p>
             <ul style="margin-bottom: 40px;">
@@ -284,26 +319,31 @@
             <div class="staff-card"><div class="staff-img">FOTO</div><div class="staff-info"><h3>Joel Stolte</h3><p><strong>Landespolizeidirektor</strong><br>Stellvertretender Inspekteur der Landespolizei<br>In der Behörde seit dem 21.09.2025</p></div></div>
         </div>
 
-        <div id="dokumente" class="content-page standard-page">
+        <div id="dokumente" class="content-page">
             <h1>Interne Dokumente</h1>
             <p>Bitte füllen Sie das Protokoll vollständig aus.</p>
-            <div class="document-view">
-                <iframe src="Unfall.html"></iframe>
+            <div class="document-view-container">
+                <div class="document-view">
+                    <iframe src="Unfall.html"></iframe>
+                </div>
             </div>
         </div>
 
-        <div id="leiterdocs" class="content-page standard-page">
+        <div id="leiterdocs" class="content-page">
             <h1>Abteilungsleiter Dokumente</h1>
-            <div class="document-view">
-                <iframe src="Versetzungsantrag3.html"></iframe>
+            <p>Führungsebene.</p>
+            <div class="document-view-container">
+                <div class="document-view">
+                    <iframe src="Versetzungsantrag3.html"></iframe>
+                </div>
             </div>
         </div>
 
-        <div id="laufbahn" class="content-page standard-page"><h1>Laufbahngruppe</h1><p>Informationen folgen...</p></div>
-        <div id="raenge" class="content-page standard-page"><h1>Ränge und Aufgaben</h1><p>Informationen folgen...</p></div>
-        <div id="mitarbeiterliste" class="content-page standard-page"><h1>Mitarbeiterliste</h1><p>Hier wird die interne Liste gepflegt.</p></div>
-        <div id="fuhrpark" class="content-page standard-page"><h1>Fuhrpark</h1><p>Hier werden alle Fahrzeuge aufgelistet.</p></div>
-        <div id="ausbildung" class="content-page standard-page"><h1>Ausbildungen</h1><p>Schulungsmaterialien und Termine.</p></div>
+        <div id="laufbahn" class="content-page"><h1>Laufbahngruppe</h1><p>Informationen folgen...</p></div>
+        <div id="raenge" class="content-page"><h1>Ränge und Aufgaben</h1><p>Informationen folgen...</p></div>
+        <div id="mitarbeiterliste" class="content-page"><h1>Mitarbeiterliste</h1><p>Hier wird die interne Liste gepflegt.</p></div>
+        <div id="fuhrpark" class="content-page"><h1>Fuhrpark</h1><p>Hier werden alle Fahrzeuge aufgelistet.</p></div>
+        <div id="ausbildung" class="content-page"><h1>Ausbildungen</h1><p>Schulungsmaterialien und Termine.</p></div>
     </main>
 
     <div id="login-overlay">
@@ -329,25 +369,42 @@
         function showPage(id) {
             const pages = document.querySelectorAll('.content-page');
             
-            // Erst alle ausblenden (Animation wird durch Klassenwechsel getriggert)
+            // Erst alle ausblenden
             pages.forEach(p => { 
                 p.classList.remove('active-page'); 
+                p.style.display = 'none'; // Hartes Ausblenden für sauberen Wechsel
             });
 
             // Zielseite finden und anzeigen
             const target = document.getElementById(id);
             if(target) {
-                target.style.display = 'block'; // Sicherstellen, dass es sichtbar ist
-                // Kleiner Timeout, damit die Animation sauber neu startet
-                setTimeout(() => {
+                // Flex oder Block, je nach Seite (Startseite braucht Flex-Zentrierung nicht)
+                if(id === 'start') {
                     target.classList.add('active-page');
-                    target.scrollTop = 0;
-                }, 10);
+                } else {
+                    target.classList.add('active-page'); // Nutzt flex aus CSS
+                }
+                target.style.display = (id === 'start') ? 'block' : 'flex';
+                
+                // Animation neu triggern
+                target.style.animation = 'none';
+                target.offsetHeight; // Trigger reflow
+                target.style.animation = null;
+
+                target.scrollTop = 0;
             }
             
             document.getElementById('sidebar').classList.remove('open');
         }
 
+        // JS-Korrektur: Standard-Zustand beim Laden herstellen
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.content-page').forEach(p => p.style.display = 'none');
+            document.getElementById('start').style.display = 'block';
+            document.getElementById('start').classList.add('active-page');
+        });
+
+        // Restliche Login-Funktionalität bleibt gleich...
         function openLogin(mode) {
             currentMode = mode;
             if (mode === 'intern' && authIntern) { showPage('mitarbeiterliste'); return; }
@@ -378,7 +435,6 @@
             } 
             else {
                 err.style.display = 'block';
-                // Kleiner Rüttel-Effekt bei falschem PW wäre auch cool, belassen wir es erstmal bei Rot.
             }
         }
 
@@ -388,7 +444,6 @@
             showPage(pageId);
         }
 
-        // Enter-Taste im Passwortfeld
         document.getElementById('pwField').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') validateLogin();
         });
