@@ -51,9 +51,7 @@
             transition: background 0.3s ease;
         }
 
-        .menu-btn:hover {
-            background: rgba(255,255,255,0.2);
-        }
+        .menu-btn:hover { background: rgba(255,255,255,0.2); }
 
         /* SIDEBAR */
         aside {
@@ -110,7 +108,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* CONTENT & ANIMATIONEN */
+        /* CONTENT */
         main {
             margin-top: 60px;
             width: 100%;
@@ -123,12 +121,11 @@
             width: 100%; 
             height: 100%; 
             overflow-y: auto; 
-            /* Neu: Wichtig für die Dokumenten-Zentrierung */
             padding: 40px 5%;
         }
 
         .active-page { 
-            display: flex; /* Neu: Erlaubt Flexbox-Zentrierung */
+            display: flex; 
             flex-direction: column;
             animation: fadeInPage 0.5s ease-out forwards;
         }
@@ -138,18 +135,15 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* STARTSEITE DESIGN */
+        /* STARTSEITE */
         #start {
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('image_14e7ee.jpg') no-repeat center center;
             background-size: cover;
-            /* Flex-Eigenschaften für Startseite überschreiben */
             display: none; 
             padding: 40px 20px;
         }
         
-        #start.active-page {
-            display: block;
-        }
+        #start.active-page { display: block; }
 
         .start-box {
             background: rgba(0, 8, 50, 0.65);
@@ -161,12 +155,11 @@
             line-height: 1.6;
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
 
-        /* NEUES DOKUMENTEN-VIEW DESIGN */
+        /* DOKUMENTEN-VIEW */
         .document-view-container {
-            flex: 1; /* Nimmt den restlichen vertikalen Platz ein */
+            flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -175,55 +168,34 @@
         }
 
         .document-view {
-            width: 100%; /* Volle Breite im Container */
-            height: 100%; /* Volle Höhe im Container */
+            width: 100%;
+            height: 100%;
             border: 1px solid #ddd; 
             border-radius: 8px; 
             background: #f9f9f9; 
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            overflow: hidden; /* Wichtig, damit das Iframe abgerundete Ecken hat */
+            overflow: hidden;
         }
         
-        iframe { 
-            width: 100%; 
-            height: 100%; 
-            border: none; 
-            display: block; /* Verhindert seltsame Abstände unten */
-        }
+        iframe { width: 100%; height: 100%; border: none; display: block; }
 
-        /* CARDS HOVER */
         .staff-card {
-            display: flex; 
-            background: #f9f9f9; 
-            border: 1px solid #ddd; 
-            padding: 20px; 
-            margin-bottom: 20px; 
-            border-radius: 8px; 
-            align-items: center;
+            display: flex; background: #f9f9f9; border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 8px; align-items: center;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .staff-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
+        .staff-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
 
-        /* LOGIN MODAL ANIMATION */
+        /* LOGIN */
         #login-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.8);
             backdrop-filter: blur(5px);
             display: none; justify-content: center; align-items: center; z-index: 2000;
-            transition: opacity 0.3s ease;
         }
 
         .login-box { 
-            background: white; 
-            padding: 35px; 
-            border-radius: 12px; 
-            width: 340px; 
-            text-align: center; 
-            color: #333;
+            background: white; padding: 35px; border-radius: 12px; width: 340px; text-align: center;
             box-shadow: 0 20px 40px rgba(0,0,0,0.5);
             animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -233,12 +205,7 @@
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        input { 
-            width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #ccc; 
-            border-radius: 5px; transition: border 0.3s;
-        }
-        input:focus { border-color: var(--police-blue); outline: none; }
-
+        input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #ccc; border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -255,6 +222,7 @@
         <div class="nav-item sub-item" onclick="showPage('laufbahn')">Laufbahngruppe</div>
         <div class="nav-item sub-item" onclick="showPage('raenge')">Ränge und Aufgaben</div>
         <div class="nav-item sub-item" onclick="showPage('leitung')">Leitungsstab</div>
+        <div class="nav-item sub-item" onclick="showPage('gesetze')">Gesetze & Verordnungen</div>
 
         <div class="nav-category">Mitarbeiter Intern</div>
         <div id="login-trigger-1" class="nav-item" onclick="openLogin('intern')">Mitarbeiter Intern 🔒</div>
@@ -278,164 +246,108 @@
                 <div style="text-align: center; border-bottom: 1px solid rgba(255,255,255,0.2); margin-bottom: 30px; padding-bottom: 20px;">
                     <h1 style="color: white; font-size: 2.5rem; margin: 0;">Willkommen</h1>
                     <p style="font-size: 1.3rem; font-style: italic; color: #ccc; margin: 10px 0;">"Unser Leben, für Ihre Sicherheit!"</p>
-                    <p>Herzlich Willkommen im Dienstportal der Landespolizei Sachsen. Nutzen Sie das Menü oben links, um zu navigieren.</p>
+                    <p>Herzlich Willkommen im Dienstportal der Landespolizei Sachsen.</p>
                 </div>
-                
-                <p>Die Landespolizei Freistaat Sachsen steht seit ihrer Gründung im September 2025 für Sicherheit, Professionalität und bürgernahe Polizeiarbeit in der gesamten Region Sachsen. Als moderne und schlagkräftige Sicherheitsbehörde sorgen wir rund um die Uhr für Ordnung, Schutz und Gerechtigkeit – auf den Straßen, im digitalen Raum und in unseren Gemeinden. Unser Leitsatz „Sicherheit. Verantwortung. Vertrauen.“ prägt das tägliche Handeln unserer Beamtinnen und Beamten – ob im Streifendienst, bei Großlagen oder in spezialisierten Ermittlungsbereichen.</p>
-                
-                <p>Die Landespolizei Freistaat Sachsen gliedert sich in drei Direktionen und eine eigenständige Kriminalpolizeiinspektion, die gemeinsam ein starkes Fundament für eine effektive Polizeiarbeit bilden:</p>
-                
-                <p><strong>DirGEV – Direktion Gefahrenabwehr / Einsatz / Verkehr</strong><br>
-                Die DirGEV ist das Rückgrat der sichtbaren Polizeiarbeit. Hier werden Einsätze koordiniert, Streifen geführt und der Verkehrsfluss aufrechterhalten. Ob präventive Maßnahmen, akute Notlagen oder Großveranstaltungen – die DirGEV steht für Präsenz und Einsatzbereitschaft.</p>
-                
-                <p><strong>DirZA – Direktion Zentrale Aufgaben</strong><br>
-                Diese Direktion bildet das organisatorische und administrative Herz der Landespolizei Sachsen. Personalmanagement, Technik, Ausbildung, Öffentlichkeitsarbeit und die Leitstelle sind hier verankert – sie sorgen dafür, dass die Polizei reibungslos und effizient arbeiten kann.</p>
-                
-                <p><strong>DirBA – Direktion Besondere Aufgaben</strong><br>
-                In dieser Direktion sind spezialisierte Einheiten gebündelt, die für besondere und außergewöhnliche Lagen ausgebildet sind. Ob Spezialeinsatzkommando, Personenschutz oder taktische Unterstützung – die DirBA ist überall dort im Einsatz, wo besondere Fähigkeiten gefragt sind.</p>
-                
-                <p><strong>KI6 – Kriminalpolizeiinspektion 6</strong><br>
-                Die KI6 widmet sich der Aufklärung und Bekämpfung schwerer Kriminalität. Von Kapitaldelikten über organisierte Kriminalität bis hin zu Cybercrime – unsere Ermittlerinnen und Ermittler arbeiten mit modernsten Methoden, um Straftaten aufzuklären und Täter zur Verantwortung zu ziehen.</p>
-                
-                <p><strong>Unsere Mission:</strong> Die Landespolizei Freistaat Sachsen steht für ein sicheres Miteinander. Wir setzen auf Transparenz, Teamgeist und Professionalität – im Dienst für die Bürgerinnen und Bürger sowie im engen Austausch mit unseren Partnerbehörden. Gemeinsam gestalten wir eine sichere Zukunft für Sachsen.</p>
+                <p>Die Landespolizei Freistaat Sachsen steht seit ihrer Gründung im September 2025...</p>
+                <p><strong>DirGEV – Direktion Gefahrenabwehr / Einsatz / Verkehr</strong><br>Die DirGEV ist das Rückgrat...</p>
+                <p><strong>DirZA – Direktion Zentrale Aufgaben</strong><br>Diese Direktion bildet...</p>
+                <p><strong>DirBA – Direktion Besondere Aufgaben</strong><br>In dieser Direktion sind...</p>
+                <p><strong>KI6 – Kriminalpolizeiinspektion 6</strong><br>Die KI6 widmet sich...</p>
+                <p><strong>Unsere Mission:</strong> Die Landespolizei Freistaat Sachsen steht für ein sicheres Miteinander...</p>
+            </div>
+        </div>
+
+        <div id="gesetze" class="content-page">
+            <h1>Gesetze & Verordnungen</h1>
+            <p>Hier finden Sie die aktuellen rechtlichen Grundlagen für den Dienstbetrieb.</p>
+            <div class="document-view-container">
+                <div class="document-view">
+                    <iframe src="Gesetzte.html"></iframe>
+                </div>
             </div>
         </div>
 
         <div id="leitung" class="content-page">
             <h1>Leitungsstab</h1>
-            <p><strong>Die Aufgaben des Leitungsstabs:</strong></p>
-            <ul style="margin-bottom: 40px;">
-                <li>Personalangelegenheiten</li>
-                <li>Angelegenheiten in Bezug auf die Öffentlichkeit</li>
-                <li>Koordination des Präsidiums im Dienst</li>
-                <li>Organisation des Präsidiums</li>
-                <li>Kommunikation mit anderen Behörden und der Stadtverwaltung</li>
-                <li>Aufrechterhaltung der Ordnung im Präsidium</li>
-                <li>Betreuung der eigenen Kollegen</li>
-            </ul>
-
             <h2>Hier findest du den Leitungsstab:</h2>
-            <div class="staff-card"><div class="staff-img">FOTO</div><div class="staff-info"><h3>Nolan Shelby</h3><p><strong>Inspekteur der Landespolizei</strong><br>In der Behörde seit dem 21.09.2025</p></div></div>
-            <div class="staff-card"><div class="staff-img">FOTO</div><div class="staff-info"><h3>Joel Stolte</h3><p><strong>Landespolizeidirektor</strong><br>Stellvertretender Inspekteur der Landespolizei<br>In der Behörde seit dem 21.09.2025</p></div></div>
+            <div class="staff-card"><div class="staff-img">FOTO</div><div class="staff-info"><h3>Nolan Shelby</h3><p><strong>Inspekteur der Landespolizei</strong></p></div></div>
+            <div class="staff-card"><div class="staff-img">FOTO</div><div class="staff-info"><h3>Joel Stolte</h3><p><strong>Landespolizeidirektor</strong></p></div></div>
         </div>
 
         <div id="dokumente" class="content-page">
             <h1>Interne Dokumente</h1>
-            <p>Bitte füllen Sie das Protokoll vollständig aus.</p>
             <div class="document-view-container">
-                <div class="document-view">
-                    <iframe src="Unfall.html"></iframe>
-                </div>
+                <div class="document-view"><iframe src="Unfall.html"></iframe></div>
             </div>
         </div>
 
         <div id="leiterdocs" class="content-page">
             <h1>Abteilungsleiter Dokumente</h1>
-            <p>Führungsebene.</p>
             <div class="document-view-container">
-                <div class="document-view">
-                    <iframe src="Versetzungsantrag3.html"></iframe>
-                </div>
+                <div class="document-view"><iframe src="Versetzungsantrag3.html"></iframe></div>
             </div>
         </div>
 
         <div id="laufbahn" class="content-page"><h1>Laufbahngruppe</h1><p>Informationen folgen...</p></div>
         <div id="raenge" class="content-page"><h1>Ränge und Aufgaben</h1><p>Informationen folgen...</p></div>
-        <div id="mitarbeiterliste" class="content-page"><h1>Mitarbeiterliste</h1><p>Hier wird die interne Liste gepflegt.</p></div>
-        <div id="fuhrpark" class="content-page"><h1>Fuhrpark</h1><p>Hier werden alle Fahrzeuge aufgelistet.</p></div>
-        <div id="ausbildung" class="content-page"><h1>Ausbildungen</h1><p>Schulungsmaterialien und Termine.</p></div>
+        <div id="mitarbeiterliste" class="content-page"><h1>Mitarbeiterliste</h1></div>
+        <div id="fuhrpark" class="content-page"><h1>Fuhrpark</h1></div>
+        <div id="ausbildung" class="content-page"><h1>Ausbildungen</h1></div>
     </main>
 
     <div id="login-overlay">
         <div class="login-box">
-            <h3 id="login-title">🔒 Interner Zugang</h3>
+            <h3 id="login-title">🔒 Zugang</h3>
             <input type="password" id="pwField" placeholder="Passwort...">
-            <button class="btn-login" onclick="validateLogin()">Anmelden</button>
-            <p id="err" style="color:red; display:none; margin-top:10px; font-size: 0.8rem;">Passwort inkorrekt!</p>
+            <button class="btn-login" onclick="validateLogin()" style="background:var(--police-blue); color:white; border:none; padding:12px; width:100%; cursor:pointer; border-radius:4px;">Anmelden</button>
+            <p id="err" style="color:red; display:none; margin-top:10px;">Inkorrekt!</p>
             <button onclick="document.getElementById('login-overlay').style.display='none'" style="margin-top:15px; border:none; background:none; color:gray; cursor:pointer;">Abbrechen</button>
         </div>
     </div>
 
     <script>
-        const HASH_INTERN = "RHJlc2RlbjExMA=="; // Dresden110
-        const HASH_LEITER = "TGVpdHVuZzIwMjY="; // Leitung2026
-
-        let currentMode = ''; 
-        let authIntern = false;
-        let authLeiter = false;
+        const HASH_INTERN = "RHJlc2RlbjExMA=="; 
+        const HASH_LEITER = "TGVpdHVuZzIwMjY="; 
+        let currentMode = ''; let authIntern = false; let authLeiter = false;
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 
         function showPage(id) {
             const pages = document.querySelectorAll('.content-page');
-            
-            // Erst alle ausblenden
-            pages.forEach(p => { 
-                p.classList.remove('active-page'); 
-                p.style.display = 'none'; // Hartes Ausblenden für sauberen Wechsel
-            });
-
-            // Zielseite finden und anzeigen
+            pages.forEach(p => { p.classList.remove('active-page'); p.style.display = 'none'; });
             const target = document.getElementById(id);
             if(target) {
-                // Flex oder Block, je nach Seite (Startseite braucht Flex-Zentrierung nicht)
-                if(id === 'start') {
-                    target.classList.add('active-page');
-                } else {
-                    target.classList.add('active-page'); // Nutzt flex aus CSS
-                }
+                target.classList.add('active-page');
                 target.style.display = (id === 'start') ? 'block' : 'flex';
-                
-                // Animation neu triggern
-                target.style.animation = 'none';
-                target.offsetHeight; // Trigger reflow
-                target.style.animation = null;
-
                 target.scrollTop = 0;
             }
-            
             document.getElementById('sidebar').classList.remove('open');
         }
 
-        // JS-Korrektur: Standard-Zustand beim Laden herstellen
         window.addEventListener('load', () => {
             document.querySelectorAll('.content-page').forEach(p => p.style.display = 'none');
             document.getElementById('start').style.display = 'block';
             document.getElementById('start').classList.add('active-page');
         });
 
-        // Restliche Login-Funktionalität bleibt gleich...
         function openLogin(mode) {
             currentMode = mode;
             if (mode === 'intern' && authIntern) { showPage('mitarbeiterliste'); return; }
             if (mode === 'leiter' && authLeiter) { showPage('leiterdocs'); return; }
-            
-            document.getElementById('login-title').innerText = mode === 'leiter' ? "🔒 Abteilungsleiter Login" : "🔒 Mitarbeiter Login";
             document.getElementById('login-overlay').style.display = 'flex';
             document.getElementById('pwField').value = '';
             document.getElementById('pwField').focus();
         }
 
         function validateLogin() {
-            const val = document.getElementById('pwField').value;
-            const encoded = btoa(val); 
-            const err = document.getElementById('err');
-
+            const encoded = btoa(document.getElementById('pwField').value);
             if (currentMode === 'intern' && encoded === HASH_INTERN) {
-                authIntern = true;
-                document.getElementById('intern-section').style.display = 'block';
-                document.getElementById('login-trigger-1').innerText = "Mitarbeiter Intern ✅";
+                authIntern = true; document.getElementById('intern-section').style.display = 'block';
                 closeAndShow('mitarbeiterliste');
-            } 
-            else if (currentMode === 'leiter' && encoded === HASH_LEITER) {
-                authLeiter = true;
-                document.getElementById('abteilungsleiter-section').style.display = 'block';
-                document.getElementById('login-trigger-2').innerText = "Abteilungsleiter Intern ✅";
+            } else if (currentMode === 'leiter' && encoded === HASH_LEITER) {
+                authLeiter = true; document.getElementById('abteilungsleiter-section').style.display = 'block';
                 closeAndShow('leiterdocs');
-            } 
-            else {
-                err.style.display = 'block';
-            }
+            } else { document.getElementById('err').style.display = 'block'; }
         }
 
         function closeAndShow(pageId) {
@@ -443,10 +355,6 @@
             document.getElementById('err').style.display = 'none';
             showPage(pageId);
         }
-
-        document.getElementById('pwField').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') validateLogin();
-        });
     </script>
 </body>
 </html>
