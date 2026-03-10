@@ -51,8 +51,6 @@
             transition: background 0.3s ease;
         }
 
-        .menu-btn:hover { background: rgba(255,255,255,0.2); }
-
         /* SIDEBAR */
         aside {
             position: fixed;
@@ -65,7 +63,6 @@
             z-index: 999;
             padding: 20px 0;
             overflow-y: auto;
-            box-shadow: 5px 0 15px rgba(0,0,0,0.2);
         }
 
         aside.open { left: 0; }
@@ -97,17 +94,6 @@
         
         .sub-item { padding-left: 50px; font-size: 0.9rem; }
 
-        #intern-section, #abteilungsleiter-section { 
-            display: none; 
-            border-top: 1px solid rgba(255,255,255,0.1);
-            animation: slideDown 0.3s ease-out;
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         /* CONTENT */
         main {
             margin-top: 60px;
@@ -125,8 +111,7 @@
         }
 
         .active-page { 
-            display: flex; 
-            flex-direction: column;
+            display: block; 
             animation: fadeInPage 0.5s ease-out forwards;
         }
 
@@ -139,11 +124,7 @@
         #start {
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('image_14e7ee.jpg') no-repeat center center;
             background-size: cover;
-            display: none; 
-            padding: 40px 20px;
         }
-        
-        #start.active-page { display: block; }
 
         .start-box {
             background: rgba(0, 8, 50, 0.65);
@@ -157,55 +138,64 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* DOKUMENTEN-VIEW */
-        .document-view-container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
+        /* GESETZE DOWNLOAD GRID */
+        .laws-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
             margin-top: 30px;
         }
 
-        .document-view {
-            width: 100%;
-            height: 100%;
-            border: 1px solid #ddd; 
-            border-radius: 8px; 
-            background: #f9f9f9; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            overflow: hidden;
+        .law-card {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-        
-        iframe { width: 100%; height: 100%; border: none; display: block; }
 
+        .law-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .law-card h3 {
+            margin: 0 0 15px 0;
+            color: var(--police-blue);
+            font-size: 1.2rem;
+        }
+
+        .btn-download {
+            display: inline-block;
+            background: var(--police-blue);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .btn-download:hover {
+            background: #001a57;
+        }
+
+        /* STAFF CARDS */
         .staff-card {
             display: flex; background: #f9f9f9; border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 8px; align-items: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
-        .staff-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .staff-img { width: 130px; height: 160px; background: #ddd; margin-right: 25px; border: 2px solid var(--police-blue); }
 
         /* LOGIN */
         #login-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(5px);
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
             display: none; justify-content: center; align-items: center; z-index: 2000;
         }
-
-        .login-box { 
-            background: white; padding: 35px; border-radius: 12px; width: 340px; text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes modalPop {
-            from { opacity: 0; transform: scale(0.8) translateY(-50px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #ccc; border-radius: 5px; }
+        .login-box { background: white; padding: 35px; border-radius: 12px; width: 340px; text-align: center; }
+        #intern-section, #abteilungsleiter-section { display: none; }
     </style>
 </head>
 <body>
@@ -246,114 +236,90 @@
                 <div style="text-align: center; border-bottom: 1px solid rgba(255,255,255,0.2); margin-bottom: 30px; padding-bottom: 20px;">
                     <h1 style="color: white; font-size: 2.5rem; margin: 0;">Willkommen</h1>
                     <p style="font-size: 1.3rem; font-style: italic; color: #ccc; margin: 10px 0;">"Unser Leben, für Ihre Sicherheit!"</p>
-                    <p>Herzlich Willkommen im Dienstportal der Landespolizei Sachsen.</p>
                 </div>
                 <p>Die Landespolizei Freistaat Sachsen steht seit ihrer Gründung im September 2025...</p>
-                <p><strong>DirGEV – Direktion Gefahrenabwehr / Einsatz / Verkehr</strong><br>Die DirGEV ist das Rückgrat...</p>
-                <p><strong>DirZA – Direktion Zentrale Aufgaben</strong><br>Diese Direktion bildet...</p>
-                <p><strong>DirBA – Direktion Besondere Aufgaben</strong><br>In dieser Direktion sind...</p>
-                <p><strong>KI6 – Kriminalpolizeiinspektion 6</strong><br>Die KI6 widmet sich...</p>
-                <p><strong>Unsere Mission:</strong> Die Landespolizei Freistaat Sachsen steht für ein sicheres Miteinander...</p>
-            </div>
+                </div>
         </div>
 
         <div id="gesetze" class="content-page">
             <h1>Gesetze & Verordnungen</h1>
-            <p>Hier finden Sie die aktuellen rechtlichen Grundlagen für den Dienstbetrieb.</p>
-            <div class="document-view-container">
-                <div class="document-view">
-                    <iframe src="Gesetzte.html"></iframe>
-                </div>
+            <p>Wählen Sie ein Dokument aus, um es zu öffnen oder herunterzuladen.</p>
+            
+            <div class="laws-grid">
+                <div class="law-card"><h3>ArbGG</h3><a href="ArbGG.pdf" target="_blank" class="btn-download">Ansehen / Download</a></div>
+                <div class="law-card"><h3>BBG</h3><a href="BBG.pdf" target="_blank" class="btn-download">Ansehen / Download</a></div>
+                <div class="law-card"><h3>BDG</h3><a href="BDG.pdf" target="_blank" class="btn-download">Ansehen / Download</a></div>
+                <div class="law-card"><h3>BGB</h3><a href="BGB.pdf" target="_blank" class="btn-download">Ansehen / Download</a></div>
+                <div class="law-card"><h3>GVG</h3><a href="GVG.pdf" target="_blank" class="btn-download">Ansehen / Download</a></div>
+                <div class="law-card"><h3>GvKostG</h3><a href="GvKostG.pdf" target="_blank" class="btn-download">Ansehen / Download</a></div>
+                <div class="law-card"><h3>InsO</h3><a href="InsO.pdf" target="_blank" class="btn-download">Ansehen / Download</a></div>
+                <div class="law-card"><h3>JAVollzO</h3><a href="JAVollzO.pdf" target="_blank" class="btn-download">Ansehen / Download</a></div>
+                <div class="law-card"><h3>OWiG</h3><a href="OWiG.pdf" target="_blank" class="btn-download">Ansehen / Download</a></div>
+                <div class="law-card"><h3>StPO</h3><a href="StPO.pdf" target="_blank" class="btn-download">Ansehen / Download</a></div>
+                <div class="law-card"><h3>StVollzG</h3><a href="StVollzG.pdf" target="_blank" class="btn-download">Ansehen / Download</a></div>
+                <div class="law-card"><h3>UZwG</h3><a href="UZwG.pdf" target="_blank" class="btn-download">Ansehen / Download</a></div>
             </div>
         </div>
 
         <div id="leitung" class="content-page">
             <h1>Leitungsstab</h1>
-            <h2>Hier findest du den Leitungsstab:</h2>
-            <div class="staff-card"><div class="staff-img">FOTO</div><div class="staff-info"><h3>Nolan Shelby</h3><p><strong>Inspekteur der Landespolizei</strong></p></div></div>
-            <div class="staff-card"><div class="staff-img">FOTO</div><div class="staff-info"><h3>Joel Stolte</h3><p><strong>Landespolizeidirektor</strong></p></div></div>
+            <div class="staff-card"><div class="staff-img"></div><div class="staff-info"><h3>Nolan Shelby</h3><p>Inspekteur</p></div></div>
+            <div class="staff-card"><div class="staff-img"></div><div class="staff-info"><h3>Joel Stolte</h3><p>Direktor</p></div></div>
         </div>
 
-        <div id="dokumente" class="content-page">
-            <h1>Interne Dokumente</h1>
-            <div class="document-view-container">
-                <div class="document-view"><iframe src="Unfall.html"></iframe></div>
-            </div>
-        </div>
-
-        <div id="leiterdocs" class="content-page">
-            <h1>Abteilungsleiter Dokumente</h1>
-            <div class="document-view-container">
-                <div class="document-view"><iframe src="Versetzungsantrag3.html"></iframe></div>
-            </div>
-        </div>
-
-        <div id="laufbahn" class="content-page"><h1>Laufbahngruppe</h1><p>Informationen folgen...</p></div>
-        <div id="raenge" class="content-page"><h1>Ränge und Aufgaben</h1><p>Informationen folgen...</p></div>
         <div id="mitarbeiterliste" class="content-page"><h1>Mitarbeiterliste</h1></div>
-        <div id="fuhrpark" class="content-page"><h1>Fuhrpark</h1></div>
-        <div id="ausbildung" class="content-page"><h1>Ausbildungen</h1></div>
+        <div id="dokumente" class="content-page">
+            <h1>Dokumente</h1>
+            <iframe src="Unfall.html" style="width:100%; height:80vh; border:none;"></iframe>
+        </div>
+        <div id="leiterdocs" class="content-page">
+            <h1>Leiter-Dokumente</h1>
+            <iframe src="Versetzungsantrag3.html" style="width:100%; height:80vh; border:none;"></iframe>
+        </div>
     </main>
 
     <div id="login-overlay">
         <div class="login-box">
-            <h3 id="login-title">🔒 Zugang</h3>
+            <h3 id="login-title">🔒 Login</h3>
             <input type="password" id="pwField" placeholder="Passwort...">
-            <button class="btn-login" onclick="validateLogin()" style="background:var(--police-blue); color:white; border:none; padding:12px; width:100%; cursor:pointer; border-radius:4px;">Anmelden</button>
-            <p id="err" style="color:red; display:none; margin-top:10px;">Inkorrekt!</p>
-            <button onclick="document.getElementById('login-overlay').style.display='none'" style="margin-top:15px; border:none; background:none; color:gray; cursor:pointer;">Abbrechen</button>
+            <button onclick="validateLogin()" style="width:100%; padding:10px; background:var(--police-blue); color:white; border:none; cursor:pointer;">Anmelden</button>
+            <p id="err" style="color:red; display:none; margin-top:10px;">Falsch!</p>
         </div>
     </div>
 
     <script>
         const HASH_INTERN = "RHJlc2RlbjExMA=="; 
-        const HASH_LEITER = "TGVpdHVuZzIwMjY="; 
-        let currentMode = ''; let authIntern = false; let authLeiter = false;
+        const HASH_LEITER = "TGVpdHVuZzIwMjY=";
+        let currentMode = '';
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 
         function showPage(id) {
-            const pages = document.querySelectorAll('.content-page');
-            pages.forEach(p => { p.classList.remove('active-page'); p.style.display = 'none'; });
+            document.querySelectorAll('.content-page').forEach(p => p.classList.remove('active-page'));
             const target = document.getElementById(id);
-            if(target) {
-                target.classList.add('active-page');
-                target.style.display = (id === 'start') ? 'block' : 'flex';
-                target.scrollTop = 0;
-            }
+            if(target) target.classList.add('active-page');
             document.getElementById('sidebar').classList.remove('open');
         }
 
-        window.addEventListener('load', () => {
-            document.querySelectorAll('.content-page').forEach(p => p.style.display = 'none');
-            document.getElementById('start').style.display = 'block';
-            document.getElementById('start').classList.add('active-page');
-        });
-
         function openLogin(mode) {
             currentMode = mode;
-            if (mode === 'intern' && authIntern) { showPage('mitarbeiterliste'); return; }
-            if (mode === 'leiter' && authLeiter) { showPage('leiterdocs'); return; }
             document.getElementById('login-overlay').style.display = 'flex';
             document.getElementById('pwField').value = '';
-            document.getElementById('pwField').focus();
         }
 
         function validateLogin() {
             const encoded = btoa(document.getElementById('pwField').value);
             if (currentMode === 'intern' && encoded === HASH_INTERN) {
-                authIntern = true; document.getElementById('intern-section').style.display = 'block';
-                closeAndShow('mitarbeiterliste');
+                document.getElementById('intern-section').style.display = 'block';
+                showPage('mitarbeiterliste');
+                document.getElementById('login-overlay').style.display = 'none';
             } else if (currentMode === 'leiter' && encoded === HASH_LEITER) {
-                authLeiter = true; document.getElementById('abteilungsleiter-section').style.display = 'block';
-                closeAndShow('leiterdocs');
-            } else { document.getElementById('err').style.display = 'block'; }
-        }
-
-        function closeAndShow(pageId) {
-            document.getElementById('login-overlay').style.display = 'none';
-            document.getElementById('err').style.display = 'none';
-            showPage(pageId);
+                document.getElementById('abteilungsleiter-section').style.display = 'block';
+                showPage('leiterdocs');
+                document.getElementById('login-overlay').style.display = 'none';
+            } else {
+                document.getElementById('err').style.display = 'block';
+            }
         }
     </script>
 </body>
