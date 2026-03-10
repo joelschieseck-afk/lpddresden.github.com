@@ -98,26 +98,23 @@
         .content-page { display: none; width: 100%; height: 100%; overflow-y: auto; }
         .active-page { display: block; }
 
-        /* STARTSEITE DESIGN ANPASSUNG */
+        /* STARTSEITE DESIGN */
         #start {
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('image_14e7ee.jpg') no-repeat center center;
             background-size: cover;
             padding: 40px 20px;
-            display: flex;
-            justify-content: center;
         }
 
         .start-box {
-            background: rgba(0, 8, 50, 0.65); /* Transparenter */
+            background: rgba(0, 8, 50, 0.65); /* Transparenter & breiter */
             padding: 40px;
             border-radius: 10px;
-            width: 95%; /* Breiter */
-            max-width: 1200px; /* Maximale Breite erhöht */
+            max-width: 1200px; /* Breiter gemacht */
+            margin: 0 auto;
             color: white;
             line-height: 1.6;
-            backdrop-filter: blur(8px); /* Blur-Effekt */
+            backdrop-filter: blur(8px);
             border: 1px solid rgba(255,255,255,0.1);
-            align-self: flex-start;
         }
 
         /* STANDARD SEITEN DESIGN */
@@ -261,9 +258,8 @@
     </div>
 
     <script>
-        // Verschlüsselte Passwörter
-        const HASH_INTERN = "RHJlc2RlbjExMA==";
-        const HASH_LEITER = "TGVpdHVuZzIwMjY=";
+        const HASH_INTERN = "RHJlc2RlbjExMA=="; // Dresden110
+        const HASH_LEITER = "TGVpdHVuZzIwMjY="; // Leitung2026
 
         let currentMode = ''; 
         let authIntern = false;
@@ -272,12 +268,18 @@
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 
         function showPage(id) {
-            document.querySelectorAll('.content-page').forEach(p => { 
+            // Alle Seiten auswählen und Klasse entfernen
+            const pages = document.querySelectorAll('.content-page');
+            pages.forEach(p => { 
                 p.classList.remove('active-page'); 
                 p.scrollTop = 0; 
             });
+            // Zielseite anzeigen
             const target = document.getElementById(id);
-            if(target) target.classList.add('active-page');
+            if(target) {
+                target.classList.add('active-page');
+            }
+            // Sidebar schließen
             document.getElementById('sidebar').classList.remove('open');
         }
 
