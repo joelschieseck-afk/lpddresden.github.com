@@ -11,6 +11,7 @@
             --white: #ffffff;
             --text-dark: #1a1a1a;
             --gray-light: #f4f4f4;
+            --transition-speed: 0.4s;
         }
 
         * { box-sizing: border-box; }
@@ -47,6 +48,11 @@
             padding: 8px 15px;
             border-radius: 4px;
             border: 1px solid rgba(255,255,255,0.2);
+            transition: background 0.3s ease;
+        }
+
+        .menu-btn:hover {
+            background: rgba(255,255,255,0.2);
         }
 
         /* SIDEBAR */
@@ -57,10 +63,11 @@
             width: 280px;
             height: calc(100% - 60px);
             background: var(--police-blue);
-            transition: 0.3s ease-in-out;
+            transition: left var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 999;
             padding: 20px 0;
             overflow-y: auto;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.2);
         }
 
         aside.open { left: 0; }
@@ -78,16 +85,32 @@
             color: #d1d9e6;
             cursor: pointer;
             display: block;
-            transition: 0.2s;
+            transition: all 0.2s ease;
             text-decoration: none;
+            border-left: 4px solid transparent;
         }
 
-        .nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+        .nav-item:hover { 
+            background: rgba(255,255,255,0.1); 
+            color: white; 
+            border-left: 4px solid #3498db;
+            padding-left: 30px;
+        }
+        
         .sub-item { padding-left: 50px; font-size: 0.9rem; }
 
-        #intern-section, #abteilungsleiter-section { display: none; border-top: 1px solid rgba(255,255,255,0.1); }
+        #intern-section, #abteilungsleiter-section { 
+            display: none; 
+            border-top: 1px solid rgba(255,255,255,0.1);
+            animation: slideDown 0.3s ease-out;
+        }
 
-        /* CONTENT */
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* CONTENT & ANIMATIONEN */
         main {
             margin-top: 60px;
             width: 100%;
@@ -95,8 +118,23 @@
             position: relative;
         }
 
-        .content-page { display: none; width: 100%; height: 100%; overflow-y: auto; }
-        .active-page { display: block; }
+        .content-page { 
+            display: none; 
+            width: 100%; 
+            height: 100%; 
+            overflow-y: auto; 
+        }
+
+        /* Neue Klasse für sanftes Erscheinen */
+        .active-page { 
+            display: block; 
+            animation: fadeInPage 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeInPage {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         /* STARTSEITE DESIGN */
         #start {
@@ -106,43 +144,65 @@
         }
 
         .start-box {
-            background: rgba(0, 8, 50, 0.65); /* Transparenter & breiter */
+            background: rgba(0, 8, 50, 0.65);
             padding: 40px;
-            border-radius: 10px;
-            max-width: 1200px; /* Breiter gemacht */
+            border-radius: 12px;
+            max-width: 1200px;
             margin: 0 auto;
             color: white;
             line-height: 1.6;
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
 
-        /* STANDARD SEITEN DESIGN */
-        .standard-page { background: var(--white); color: var(--text-dark); padding: 40px 5%; }
-        
-        .document-view {
-            width: 100%;
-            height: 85vh;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background: #f9f9f9;
-            margin-top: 20px;
-        }
-        iframe { width: 100%; height: 100%; border: none; }
-
+        /* CARDS HOVER */
         .staff-card {
-            display: flex; background: #f9f9f9; border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 5px; align-items: center;
+            display: flex; 
+            background: #f9f9f9; 
+            border: 1px solid #ddd; 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            border-radius: 8px; 
+            align-items: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .staff-img { width: 130px; height: 160px; background: #ddd; margin-right: 25px; border: 2px solid var(--police-blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
-        /* LOGIN MODAL */
-        #login-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9);
-            display: none; justify-content: center; align-items: center; z-index: 2000;
+        .staff-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
-        .login-box { background: white; padding: 30px; border-radius: 8px; width: 320px; text-align: center; color: #333; }
-        .btn-login { background: var(--police-blue); color: white; border: none; padding: 12px; width: 100%; cursor: pointer; border-radius: 4px; font-weight: bold; margin-top: 10px; }
-        input { width: 100%; padding: 10px; margin: 15px 0; border: 1px solid #ccc; }
+
+        /* LOGIN MODAL ANIMATION */
+        #login-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center; z-index: 2000;
+            transition: opacity 0.3s ease;
+        }
+
+        .login-box { 
+            background: white; 
+            padding: 35px; 
+            border-radius: 12px; 
+            width: 340px; 
+            text-align: center; 
+            color: #333;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.8) translateY(-50px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        input { 
+            width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #ccc; 
+            border-radius: 5px; transition: border 0.3s;
+        }
+        input:focus { border-color: var(--police-blue); outline: none; }
 
     </style>
 </head>
@@ -226,7 +286,7 @@
 
         <div id="dokumente" class="content-page standard-page">
             <h1>Interne Dokumente</h1>
-            <p>Bitte füllen Sie das Protokoll vollständig aus. Nach dem Klick auf "Senden" wird ein Bericht an Discord übermittelt.</p>
+            <p>Bitte füllen Sie das Protokoll vollständig aus.</p>
             <div class="document-view">
                 <iframe src="Unfall.html"></iframe>
             </div>
@@ -234,7 +294,6 @@
 
         <div id="leiterdocs" class="content-page standard-page">
             <h1>Abteilungsleiter Dokumente</h1>
-            <p>Vertrauliche Formulare für die Führungsebene.</p>
             <div class="document-view">
                 <iframe src="Versetzungsantrag3.html"></iframe>
             </div>
@@ -268,18 +327,24 @@
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 
         function showPage(id) {
-            // Alle Seiten auswählen und Klasse entfernen
             const pages = document.querySelectorAll('.content-page');
+            
+            // Erst alle ausblenden (Animation wird durch Klassenwechsel getriggert)
             pages.forEach(p => { 
                 p.classList.remove('active-page'); 
-                p.scrollTop = 0; 
             });
-            // Zielseite anzeigen
+
+            // Zielseite finden und anzeigen
             const target = document.getElementById(id);
             if(target) {
-                target.classList.add('active-page');
+                target.style.display = 'block'; // Sicherstellen, dass es sichtbar ist
+                // Kleiner Timeout, damit die Animation sauber neu startet
+                setTimeout(() => {
+                    target.classList.add('active-page');
+                    target.scrollTop = 0;
+                }, 10);
             }
-            // Sidebar schließen
+            
             document.getElementById('sidebar').classList.remove('open');
         }
 
@@ -313,6 +378,7 @@
             } 
             else {
                 err.style.display = 'block';
+                // Kleiner Rüttel-Effekt bei falschem PW wäre auch cool, belassen wir es erstmal bei Rot.
             }
         }
 
@@ -321,6 +387,11 @@
             document.getElementById('err').style.display = 'none';
             showPage(pageId);
         }
+
+        // Enter-Taste im Passwortfeld
+        document.getElementById('pwField').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') validateLogin();
+        });
     </script>
 </body>
 </html>
